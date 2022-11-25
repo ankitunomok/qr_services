@@ -1,19 +1,17 @@
-import axios from 'axios';
-import { useState } from 'react';
-import { QrReader } from 'react-qr-reader';
-import '../App.css';
-import { asyncWrap } from '../asyncWrap';
-// import { setAxiosDefault } from './axiosDefaults';
-import qrcodeimage from "../images/qr.jpg"
-// import { AppRoutes } from './routes';
+import axios from "axios";
+import { useState } from "react";
+import { QrReader } from "react-qr-reader";
+import "../App.css";
+import { asyncWrap } from "../asyncWrap";
+import qrcodeimage from "../images/qr.jpg";
 
 function Qr(props) {
   // eslint-disable-next-line
-  const { qrcode, setQrCode, setIsScanning } = props;
+  const { setQrCode, setIsScanning } = props;
 
   const previewStyle = {
-    height: 300,
-    width: 200,
+    height: 500,
+    width: 350,
     display: "flex",
     justifyContent: "center",
   };
@@ -35,12 +33,12 @@ function Qr(props) {
     <div style={camstyle}>
       <QrReader
         containerStyle={previewStyle}
-        scanDelay={100}
+        scanDelay={200}
         onResult={handleScan}
         constraints={{ facingMode: "environment" }}
       />
     </div>
-  )
+  );
 }
 
 function Home() {
@@ -51,7 +49,6 @@ function Home() {
   const mobileValidation = /^[0]?[6789]\d{9}$/;
 
   const handleSubmit = async () => {
-
     if (qrcode.length === 0) {
       alert("Please scan atleast one qr code!");
       return;
@@ -67,7 +64,7 @@ function Home() {
       pin: qrcode,
       networkId: "100",
       shortCode: "8790000000",
-      source: "web"
+      source: "web",
     };
 
     const config = {
@@ -91,16 +88,18 @@ function Home() {
       alert(result.data.message);
       return;
     }
-  }
+  };
 
   return (
     <div>
       {isScanning ? (
-        <Qr qrcode={qrcode} setQrCode={setQrCode} setIsScanning={setIsScanning} />
+        <Qr setQrCode={setQrCode} setIsScanning={setIsScanning} />
       ) : (
         <>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <p style={{ alignSelf: "center" }}>Please complete the required details below:</p>
+            <p style={{ alignSelf: "center" }}>
+              Please complete the required details below:
+            </p>
             <img
               style={{ width: "100px", alignSelf: "center" }}
               onClick={(e) => {
@@ -111,19 +110,28 @@ function Home() {
               src={qrcodeimage}
               alt="qr.jpg"
             />
-            <form style={{ display: "flex", flexDirection: "column", width: "100%" }} method='POST' action='#'>
+            <form
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+              }}
+              method="POST"
+              action="#"
+            >
               <input
                 style={{
                   width: "90%",
                   alignSelf: "center",
                   padding: "10px",
-                  marginTop: "10px"
+                  marginTop: "10px",
+                  maxWidth: "400px",
                 }}
                 type="text"
                 value={qrcode}
                 onChange={(e) => {
                   e.preventDefault();
-                  setQrCode(e.target.value)
+                  setQrCode(e.target.value);
                 }}
                 placeholder="QR code"
               />
@@ -132,26 +140,34 @@ function Home() {
                   width: "90%",
                   alignSelf: "center",
                   padding: "10px",
-                  marginTop: "10px"
+                  marginTop: "10px",
+                  maxWidth: "400px",
                 }}
                 type="number"
                 value={mobile}
                 onChange={(e) => {
                   e.preventDefault();
-                  setMobile(e.target.value)
+                  setMobile(e.target.value);
                 }}
                 placeholder="Phone Number"
               />
-              <input onClick={(e) => {
-                e.preventDefault();
-                handleSubmit();
-              }} style={{ padding: "10px 50px", marginTop: "10px", alignSelf: "center" }} type="submit" />
+              <input
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+                style={{
+                  padding: "10px 50px",
+                  marginTop: "10px",
+                  alignSelf: "center",
+                }}
+                type="submit"
+              />
             </form>
           </div>
         </>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
 
